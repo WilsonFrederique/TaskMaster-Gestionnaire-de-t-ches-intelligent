@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
 import './FrmTache.css';
 
+// Types
+type TaskStatus = 'a_faire' | 'en_cours' | 'termine' | 'annule';
+type TaskPriority = 'basse' | 'moyenne' | 'haute' | 'urgente';
+
+interface TaskFormData {
+  title: string;
+  description: string;
+  start_datetime: string;
+  end_datetime: string;
+  image_path: File | null;
+  status: TaskStatus;
+  priority: TaskPriority;
+  category_id: string;
+}
+
 const FrmTache = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<TaskFormData>({
     title: '',
     description: '',
     start_datetime: '',
@@ -15,24 +30,24 @@ const FrmTache = () => {
     category_id: ''
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [previewImage, setPreviewImage] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [successMessage, setSuccessMessage] = useState<string>('');
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
     if (file) {
       setFormData(prev => ({ ...prev, image_path: file }));
       setPreviewImage(URL.createObjectURL(file));
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
@@ -86,7 +101,7 @@ const FrmTache = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1, duration: 0.4 }}
       >
-        <div className="">
+        <div className="form-content">
           {/* Titre */}
           <div className="">
             <label htmlFor="title" className="form-label">
@@ -122,7 +137,7 @@ const FrmTache = () => {
               onChange={handleChange}
               placeholder="Décrivez la tâche en détail..."
               className="form-input textarea mb"
-              rows="5"
+              rows={5}
               required
             />
           </div>
@@ -162,7 +177,7 @@ const FrmTache = () => {
           </div>
 
           {/* Image */}
-          <div className="form-group">
+          <div className="">
             <label htmlFor="image_path" className="form-label">
               <Icon icon="bx:image-add" className="label-icon" />
               <span>Image (optionnel)</span>
@@ -177,8 +192,6 @@ const FrmTache = () => {
                 className="file-input mb"
               />
               <label htmlFor="image_path" className="file-label">
-                {/* <Icon icon="bx:upload" /> */}
-                &nbsp;&nbsp;
                 <span>{previewImage ? 'Changer l\'image' : 'Choisir une image'}</span>
               </label>
               {previewImage && (
@@ -190,13 +203,13 @@ const FrmTache = () => {
           </div>
 
           {/* Status et Priorité */}
-          <div className="form-group">
+          <div className="">
             <label className="form-label">
               <Icon icon="bx:list-check" className="label-icon" />
               <span>Statut</span>
             </label>
             <div className="radio-group">
-              {['a_faire', 'en_cours', 'termine', 'annule'].map(status => (
+              {(['a_faire', 'en_cours', 'termine', 'annule'] as TaskStatus[]).map(status => (
                 <label key={status} className="radio-label mb">
                   <input
                     type="radio"
@@ -218,13 +231,13 @@ const FrmTache = () => {
             </div>
           </div>
 
-          <div className="form-group">
+          <div className="">
             <label className="form-label">
               <Icon icon="bx:signal-3" className="label-icon" />
               <span>Priorité</span>
             </label>
             <div className="radio-group">
-              {['basse', 'moyenne', 'haute', 'urgente'].map(priority => (
+              {(['basse', 'moyenne', 'haute', 'urgente'] as TaskPriority[]).map(priority => (
                 <label key={priority} className="radio-label mb">
                   <input
                     type="radio"

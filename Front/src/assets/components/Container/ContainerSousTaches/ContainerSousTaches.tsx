@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './ContainerSousTaches.css';
 
-const ContainerSousTaches = ({ initialTaskId = 3 }) => {
-  const [subtasks, setSubtasks] = useState([
+// Types
+interface SubTask {
+  id: number;
+  title: string;
+  is_done: number;
+  task_id: number;
+}
+
+interface ContainerSousTachesProps {
+  initialTaskId?: number;
+}
+
+const ContainerSousTaches: React.FC<ContainerSousTachesProps> = ({ initialTaskId = 3 }) => {
+  const [subtasks, setSubtasks] = useState<SubTask[]>([
     { id: 2, title: "Créer les routes dans urls.py", is_done: 0, task_id: 3 }
   ]);
-  const [newSubtask, setNewSubtask] = useState('');
-  const [taskId, setTaskId] = useState(initialTaskId);
-  const [isAdding, setIsAdding] = useState(false);
+  const [newSubtask, setNewSubtask] = useState<string>('');
+  const [taskId, setTaskId] = useState<number>(initialTaskId);
+  const [isAdding, setIsAdding] = useState<boolean>(false);
 
-  const toggleStatus = (id) => {
+  const toggleStatus = (id: number) => {
     setSubtasks(subtasks.map(subtask => 
       subtask.id === id ? { ...subtask, is_done: subtask.is_done ? 0 : 1 } : subtask
     ));
@@ -19,7 +31,7 @@ const ContainerSousTaches = ({ initialTaskId = 3 }) => {
 
   const addSubtask = () => {
     if (newSubtask.trim()) {
-      const newSubtaskObj = {
+      const newSubtaskObj: SubTask = {
         id: Math.max(...subtasks.map(t => t.id), 0) + 1,
         title: newSubtask,
         is_done: 0,
@@ -31,7 +43,7 @@ const ContainerSousTaches = ({ initialTaskId = 3 }) => {
     }
   };
 
-  const deleteSubtask = (id) => {
+  const deleteSubtask = (id: number) => {
     setSubtasks(subtasks.filter(subtask => subtask.id !== id));
   };
 
@@ -103,17 +115,17 @@ const ContainerSousTaches = ({ initialTaskId = 3 }) => {
                 <input
                   type="text"
                   value={newSubtask}
-                  onChange={(e) => setNewSubtask(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSubtask(e.target.value)}
                   placeholder="Nouvelle sous-tâche..."
                   autoFocus
-                  onKeyDown={(e) => e.key === 'Enter' && addSubtask()}
+                  onKeyDown={(e: React.KeyboardEvent) => e.key === 'Enter' && addSubtask()}
                 />
                 <div className="task-id-input">
                   <label>ID de la tâche parente:</label>
                   <input
                     type="number"
                     value={taskId}
-                    onChange={(e) => setTaskId(Number(e.target.value))}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTaskId(Number(e.target.value))}
                     min="1"
                   />
                 </div>
@@ -165,7 +177,7 @@ const ContainerSousTaches = ({ initialTaskId = 3 }) => {
                       }}
                       transition={{ duration: 0.2 }}
                     >
-                      {subtask.is_done && (
+                      {subtask.is_done === 1 && (
                         <Icon 
                           icon="bx:check"
                           className="checkbox-icon"

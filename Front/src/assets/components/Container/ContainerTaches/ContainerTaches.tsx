@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './ContainerTaches.css';
 import { Icon } from '@iconify/react';
 import { motion, AnimatePresence } from 'framer-motion';

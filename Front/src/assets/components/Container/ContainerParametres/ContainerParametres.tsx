@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import './ContainerParametres.css';
 import { Icon } from '@iconify/react';
 
+// Définition des types
+interface Settings {
+  nomEntreprise: string;
+  emailContact: string;
+  adresse: string;
+  telephone: string;
+  devise: string;
+  tva: number;
+  logo: File | null;
+  theme: 'light' | 'dark';
+  notificationsEmail: boolean;
+  notificationsSms: boolean;
+}
+
 const ContainerParametres = () => {
-  const [activeTab, setActiveTab] = useState('general');
-  const [settings, setSettings] = useState({
+  const [activeTab, setActiveTab] = useState<'general' | 'entreprise' | 'notifications' | 'apparence'>('general');
+  
+  const [settings, setSettings] = useState<Settings>({
     nomEntreprise: 'Mon Entreprise',
     emailContact: 'contact@entreprise.com',
     adresse: '123 Rue Principale, Ville',
@@ -17,29 +32,31 @@ const ContainerParametres = () => {
     notificationsSms: false
   });
 
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    
     setSettings(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : type === 'number' ? Number(value) : value
     }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result);
+        setImagePreview(reader.result as string);
         setSettings(prev => ({ ...prev, logo: file }));
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     console.log('Paramètres sauvegardés:', settings);
     // Ici vous ajouteriez la logique pour envoyer les données au serveur
@@ -152,7 +169,7 @@ const ContainerParametres = () => {
                   name="adresse"
                   value={settings.adresse}
                   onChange={handleChange}
-                  rows="3"
+                  rows={3}
                 />
               </div>
 

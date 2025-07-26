@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
 import './FrmCategorie.css';
 
 const FrmCategorie = () => {
-  const [categoryName, setCategoryName] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
+  const [categoryName, setCategoryName] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [successMessage, setSuccessMessage] = useState<string>('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
@@ -53,7 +53,7 @@ const FrmCategorie = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1, duration: 0.4 }}
       >
-        <div className="form-group">
+        <div className="">
           <div className="form-label">
             <div>
               <span>Nom de la catégorie</span>
@@ -63,7 +63,7 @@ const FrmCategorie = () => {
             type="text"
             id="categoryName"
             value={categoryName}
-            onChange={(e) => setCategoryName(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCategoryName(e.target.value)}
             placeholder="Ex: Projet Client"
             className="form-input"
             required
