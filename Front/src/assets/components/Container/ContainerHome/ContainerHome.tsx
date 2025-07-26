@@ -1,10 +1,32 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './ContainerHome.css';
 
-// Données simulées avec catégories
-const tasks = [
+// Définition des types
+interface Subtask {
+  id: number;
+  title: string;
+  is_done: boolean;
+  task_id: number;
+}
+
+interface Task {
+  id: number;
+  title: string;
+  description: string;
+  start_datetime: string;
+  end_datetime: string;
+  status: 'a_faire' | 'en_cours' | 'terminee';
+  priority: 'haute' | 'moyenne' | 'basse';
+  category_id: number;
+  category_name: string;
+  image_path: string;
+  subtasks: Subtask[];
+}
+
+// Données simulées avec typage
+const tasks: Task[] = [
   {
     id: 1,
     title: "Préparer le rapport",
@@ -33,33 +55,34 @@ const tasks = [
       {
         id: 2,
         title: "Créer les routes dans urls.py",
-        // is_done: 0,
+        is_done: false,
         task_id: 3
       }
     ]
   }
 ];
 
-const priorityColors = {
+// Typage des objets de configuration
+const priorityColors: Record<string, string> = {
   haute: "#ef4444",
   moyenne: "#f59e0b",
   basse: "#10b981"
 };
 
-const priorityLabels = {
+const priorityLabels: Record<string, string> = {
   haute: "Haute",
   moyenne: "Moyenne",
   basse: "Basse"
 };
 
-const statusLabels = {
+const statusLabels: Record<string, string> = {
   a_faire: "À faire",
   en_cours: "En cours",
   terminee: "Terminée"
 };
 
-// Fonction pour formater la date
-const formatDate = (dateString) => {
+// Fonctions avec typage des paramètres et retour
+const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
   return date.toLocaleDateString('fr-FR', {
     day: 'numeric',
@@ -68,8 +91,7 @@ const formatDate = (dateString) => {
   });
 };
 
-// Fonction pour formater l'heure
-const formatTime = (dateString) => {
+const formatTime = (dateString: string): string => {
   const date = new Date(dateString);
   return date.toLocaleTimeString('fr-FR', {
     hour: '2-digit',
@@ -78,40 +100,58 @@ const formatTime = (dateString) => {
 };
 
 const ContainerHome = () => {
-  const [selectedTask, setSelectedTask] = useState(null);
-  const [newSubtask, setNewSubtask] = useState('');
-  const [isAddingSubtask, setIsAddingSubtask] = useState(false);
+  // États avec typage
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [newSubtask, setNewSubtask] = useState<string>('');
+  const [isAddingSubtask, setIsAddingSubtask] = useState<boolean>(false);
 
-  const toggleSubtaskStatus = (taskId, subtaskId) => {
-    // Implémentation de la logique de basculement du statut
+  const toggleSubtaskStatus = (_taskId: number, subtaskId: number): void => {
+    setSelectedTask(prev => {
+      if (!prev) return null;
+      
+      return {
+        ...prev,
+        subtasks: prev.subtasks.map(subtask => 
+          subtask.id === subtaskId 
+            ? { ...subtask, is_done: !subtask.is_done } 
+            : subtask
+        )
+      };
+    });
   };
 
-  const addSubtask = (taskId) => {
-    // Implémentation de l'ajout de sous-tâche
-    if (newSubtask.trim()) {
-      const newSubtaskObj = {
-        id: Math.floor(Math.random() * 1000),
-        title: newSubtask,
-        // is_done: 0,
-        task_id: taskId
-      };
+  const addSubtask = (taskId: number): void => {
+    if (!newSubtask.trim()) return;
+
+    const newSubtaskObj: Subtask = {
+      id: Math.floor(Math.random() * 1000),
+      title: newSubtask,
+      is_done: false,
+      task_id: taskId
+    };
+    
+    setSelectedTask(prev => {
+      if (!prev) return null;
       
-      setSelectedTask(prev => ({
+      return {
         ...prev,
         subtasks: [...prev.subtasks, newSubtaskObj]
-      }));
-      
-      setNewSubtask('');
-      setIsAddingSubtask(false);
-    }
+      };
+    });
+    
+    setNewSubtask('');
+    setIsAddingSubtask(false);
   };
 
-  const deleteSubtask = (taskId, subtaskId) => {
-    // Implémentation de la suppression de sous-tâche
-    setSelectedTask(prev => ({
-      ...prev,
-      subtasks: prev.subtasks.filter(st => st.id !== subtaskId)
-    }));
+  const deleteSubtask = (_taskId: number, subtaskId: number): void => {
+    setSelectedTask(prev => {
+      if (!prev) return null;
+      
+      return {
+        ...prev,
+        subtasks: prev.subtasks.filter(st => st.id !== subtaskId)
+      };
+    });
   };
 
   return (
@@ -343,10 +383,10 @@ const ContainerHome = () => {
                         <input
                           type="text"
                           value={newSubtask}
-                          onChange={(e) => setNewSubtask(e.target.value)}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSubtask(e.target.value)}
                           placeholder="Entrez le titre de la sous-tâche..."
                           autoFocus
-                          onKeyDown={(e) => e.key === 'Enter' && addSubtask(selectedTask.id)}
+                          onKeyDown={(e: React.KeyboardEvent) => e.key === 'Enter' && addSubtask(selectedTask.id)}
                         />
                         <div className="form-actions">
                           <button 

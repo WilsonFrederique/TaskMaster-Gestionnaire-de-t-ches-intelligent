@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './ContainerTaches.css';
 import { Icon } from '@iconify/react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -78,14 +78,16 @@ const ContainerTaches = () => {
             <a href="#" className="breadcrumb-link active">Tâches</a>
           </nav>
         </div>
-        <motion.button 
-          className="new-task-button pulse-effect"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Icon icon="bx:bx-plus" className="button-icon" />
-          {!isMobile && <span>Nouvelle tâche</span>}
-        </motion.button>
+        <a href="/frmTaches">
+          <motion.button 
+            className="new-task-button pulse-effect"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Icon icon="bx:bx-plus" className="button-icon" />
+            {!isMobile && <span>Nouvelle tâche</span>}
+          </motion.button>
+        </a>
       </motion.header>
 
       {/* Filter Section */}
