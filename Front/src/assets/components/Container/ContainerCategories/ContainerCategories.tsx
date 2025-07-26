@@ -102,14 +102,16 @@ const ContainerCategories = () => {
             <a href="#" className="breadcrumb-link active">Catégories</a>
           </nav>
         </div>
-        <motion.button 
-          className="new-task-button pulse-effect"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Icon icon="bx:bx-plus" className="button-icon" />
-          {!isMobile && <span>Nouvelle tâche</span>}
-        </motion.button>
+        <a href="/frmCategories">
+          <motion.button 
+            className="new-task-button pulse-effect"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Icon icon="bx:bx-plus" className="button-icon" />
+            {!isMobile && <span>Nouvelle tâche</span>}
+          </motion.button>
+        </a>
       </motion.header>
 
       {/* Barre de recherche et filtres */}
