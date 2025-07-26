@@ -622,6 +622,14 @@
   opacity: 0.5;
 }
 
+.panel-title{
+  color: #010f1fc6 !important;
+}
+
+.dark-mode .panel-title{
+  color: #cbd5e1 !important;
+}
+
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
