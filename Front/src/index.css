@@ -1,0 +1,108 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+li{
+    list-style: none;
+}
+
+
+:root{
+    --blue-webkit: #3c91e6;
+}
+
+.dark-theme-variables{
+    --blue-webkit: #1f3c5a;
+}
+
+::-webkit-scrollbar{ width: 5px !important; height: 5px !important; }
+::-webkit-scrollbar-thumb{ background: var(--blue-webkit) !important; }
+::-webkit-scrollbar-track{ background: transparent !important; }
+
+
+
+
+
+
+
+
+/* Icone action tbl  */
+
+.action-tbl {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.action-btn.edit {
+  color: var(--blue);
+  border: 1px solid var(--blue);
+}
+
+.action-btn.edit:hover {
+  background: var(--blue);
+  color: white;
+}
+
+.action-btn.delete {
+  color: var(--red);
+  border: 1px solid var(--red);
+}
+
+.action-btn.delete:hover {
+  background: var(--red);
+  color: white;
+}
+
+.action-icon {
+  font-size: 16px;
+}
+
+/* Dark mode styles */
+.dark-mode .action-btn.edit {
+  color: var(--light-blue);
+  border-color: var(--light-blue);
+}
+
+.dark-mode .action-btn.edit:hover {
+  background: var(--light-blue);
+}
+
+.dark-mode .action-btn.delete {
+  color: var(--light-red);
+  border-color: var(--light-red);
+}
+
+.dark-mode .action-btn.delete:hover {
+  background: var(--light-red);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .action-btn {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .action-icon {
+    font-size: 14px;
+  }
+}
