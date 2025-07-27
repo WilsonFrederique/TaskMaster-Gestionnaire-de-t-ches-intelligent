@@ -1,20 +1,16 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
+import { TaskService, TaskCreateData } from '../../../../services/taches_api';
+import { CategoryService, Category } from '../../../../services/Categories_api';
 import './FrmTache.css';
 
-// Types
-type TaskStatus = 'a_faire' | 'en_cours' | 'termine' | 'annule';
-type TaskPriority = 'basse' | 'moyenne' | 'haute' | 'urgente';
+type TaskStatus = 'a_faire' | 'en_cours' | 'terminee';
+type TaskPriority = 'faible' | 'moyenne' | 'haute';
 
-interface TaskFormData {
-  title: string;
-  description: string;
-  start_datetime: string;
-  end_datetime: string;
-  image_path: File | null;
-  status: TaskStatus;
-  priority: TaskPriority;
+interface TaskFormData extends Omit<TaskCreateData, 'category_id'> {
+  image_file: File | null;
   category_id: string;
 }
 
@@ -24,57 +20,124 @@ const FrmTache = () => {
     description: '',
     start_datetime: '',
     end_datetime: '',
-    image_path: null,
+    image_file: null,
     status: 'a_faire',
     priority: 'moyenne',
     category_id: ''
   });
 
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [successMessage, setSuccessMessage] = useState<string>('');
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const loadedCategories = await CategoryService.getAll();
+        setCategories(loadedCategories);
+      } catch (error) {
+        console.error('Erreur chargement catégories:', error);
+        setErrorMessage('Erreur lors du chargement des catégories');
+      }
+    };
+
+    loadCategories();
+
+    // Initialiser les dates par défaut
+    const now = new Date();
+    const defaultEndDate = new Date(now.getTime() + 60 * 60 * 1000); // +1 heure
+    
+    setFormData(prev => ({
+      ...prev,
+      start_datetime: formatDateTimeForInput(now),
+      end_datetime: formatDateTimeForInput(defaultEndDate)
+    }));
+  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    if (errorMessage) setErrorMessage('');
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     if (file) {
-      setFormData(prev => ({ ...prev, image_path: file }));
+      setFormData(prev => ({ ...prev, image_file: file }));
       setPreviewImage(URL.createObjectURL(file));
     }
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     
-    // Simuler une requête API
-    setTimeout(() => {
-      console.log('Tâche soumise:', formData);
-      setSuccessMessage('Tâche créée avec succès!');
+    if (!formData.title.trim() || !formData.description.trim() || 
+        !formData.start_datetime || !formData.end_datetime || 
+        !formData.category_id) {
+      setErrorMessage('Veuillez remplir tous les champs obligatoires');
+      return;
+    }
+
+    const startDate = new Date(formData.start_datetime);
+    const endDate = new Date(formData.end_datetime);
+
+    if (startDate > endDate) {
+      setErrorMessage('La date de fin doit être postérieure ou égale à la date de début');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMessage('');
+    setSuccessMessage('');
+
+    try {
+      const taskData: TaskCreateData = {
+        title: formData.title,
+        description: formData.description,
+        start_datetime: formData.start_datetime,
+        end_datetime: formData.end_datetime,
+        status: formData.status,
+        priority: formData.priority,
+        category_id: parseInt(formData.category_id)
+      };
+
+      const newTask = await TaskService.create(taskData);
+      
+      setSuccessMessage(`Tâche "${newTask.title}" créée avec succès!`);
+      
       setFormData({
         title: '',
         description: '',
-        start_datetime: '',
-        end_datetime: '',
-        image_path: null,
+        start_datetime: formatDateTimeForInput(new Date()),
+        end_datetime: formatDateTimeForInput(new Date(Date.now() + 3600000)),
+        image_file: null,
         status: 'a_faire',
         priority: 'moyenne',
         category_id: ''
       });
       setPreviewImage(null);
+
+      setTimeout(() => navigate('/tache'), 3000);
+    } catch (error: any) {
+      console.error('Erreur création tâche:', error);
+      setErrorMessage(error.message || 'Erreur lors de la création de la tâche');
+    } finally {
       setIsSubmitting(false);
-      
-      setTimeout(() => setSuccessMessage(''), 3000);
-    }, 1500);
+    }
+  };
+
+  const formatDateTimeForInput = (date: Date) => {
+    // Correction pour le décalage de fuseau horaire
+    const offset = date.getTimezoneOffset() * 60000;
+    const localISOTime = new Date(date.getTime() - offset).toISOString().slice(0, 16);
+    return localISOTime;
   };
 
   return (
     <div className="frm-container">
-      {/* Main Header */}
       <motion.header 
         className="task-header"
         initial={{ opacity: 1 }}
@@ -101,12 +164,22 @@ const FrmTache = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1, duration: 0.4 }}
       >
-        <div className="form-content">
-          {/* Titre */}
-          <div className="">
+        <div className="form-content">        
+          {errorMessage && (
+            <motion.div 
+              className="error-message mb"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <Icon icon="bx:error-circle" className="error-icon" />
+              {errorMessage}
+            </motion.div>
+          )}
+
+          <div className="mb">
             <label htmlFor="title" className="form-label">
               <Icon icon="bx:rename" className="label-icon" />
-              <span>Titre de la tâche</span>
+              <span>Titre de la tâche *</span>
             </label>
             <input
               type="text"
@@ -118,17 +191,17 @@ const FrmTache = () => {
               className="form-input"
               required
               maxLength={200}
+              disabled={isSubmitting}
             />
-            <small className="input-hint mb">
-              Maximum 200 caractères (reste: {200 - formData.title.length})
+            <small className="input-hint">
+              Maximum 200 caractères ({200 - formData.title.length} restants)
             </small>
           </div>
 
-          {/* Description */}
-          <div className="">
+          <div className="mb">
             <label htmlFor="description" className="form-label">
               <Icon icon="bx:detail" className="label-icon" />
-              <span>Description</span>
+              <span>Description *</span>
             </label>
             <textarea
               id="description"
@@ -136,17 +209,17 @@ const FrmTache = () => {
               value={formData.description}
               onChange={handleChange}
               placeholder="Décrivez la tâche en détail..."
-              className="form-input textarea mb"
+              className="form-input textarea"
               rows={5}
               required
+              disabled={isSubmitting}
             />
           </div>
 
-          {/* Dates */}
-          <div className="">
+          <div className="mb">
             <label className="form-label">
               <Icon icon="bx:calendar" className="label-icon" />
-              <span>Période</span>
+              <span>Période *</span>
             </label>
             <div className="date-grid">
               <div className="date-group">
@@ -159,9 +232,10 @@ const FrmTache = () => {
                   onChange={handleChange}
                   className="form-input"
                   required
+                  disabled={isSubmitting}
                 />
               </div>
-              <div className="date-group mb">
+              <div className="date-group">
                 <label htmlFor="end_datetime" className="date-label">Fin</label>
                 <input
                   type="datetime-local"
@@ -171,46 +245,20 @@ const FrmTache = () => {
                   onChange={handleChange}
                   className="form-input"
                   required
+                  disabled={isSubmitting}
                 />
               </div>
             </div>
           </div>
 
-          {/* Image */}
-          <div className="">
-            <label htmlFor="image_path" className="form-label">
-              <Icon icon="bx:image-add" className="label-icon" />
-              <span>Image (optionnel)</span>
-            </label>
-            <div className="image-upload mbi">
-              <input
-                type="file"
-                id="image_path"
-                name="image_path"
-                onChange={handleFileChange}
-                accept="image/*"
-                className="file-input mb"
-              />
-              <label htmlFor="image_path" className="file-label">
-                <span>{previewImage ? 'Changer l\'image' : 'Choisir une image'}</span>
-              </label>
-              {previewImage && (
-                <div className="image-preview mbi">
-                  <img src={previewImage} alt="Aperçu" className="preview-image" />
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Status et Priorité */}
-          <div className="">
+          <div className="mb">
             <label className="form-label">
               <Icon icon="bx:list-check" className="label-icon" />
-              <span>Statut</span>
+              <span>Statut *</span>
             </label>
             <div className="radio-group">
-              {(['a_faire', 'en_cours', 'termine', 'annule'] as TaskStatus[]).map(status => (
-                <label key={status} className="radio-label mb">
+              {(['a_faire', 'en_cours', 'terminee'] as TaskStatus[]).map(status => (
+                <label key={status} className="radio-label">
                   <input
                     type="radio"
                     name="status"
@@ -218,27 +266,27 @@ const FrmTache = () => {
                     checked={formData.status === status}
                     onChange={handleChange}
                     className="radio-input"
+                    disabled={isSubmitting}
                   />
                   <span className="radio-custom"></span>
                   <span className="radio-text">
                     {status === 'a_faire' && 'À faire'}
                     {status === 'en_cours' && 'En cours'}
-                    {status === 'termine' && 'Terminé'}
-                    {status === 'annule' && 'Annulé'}
+                    {status === 'terminee' && 'Terminée'}
                   </span>
                 </label>
               ))}
             </div>
           </div>
 
-          <div className="">
+          <div className="mb">
             <label className="form-label">
               <Icon icon="bx:signal-3" className="label-icon" />
-              <span>Priorité</span>
+              <span>Priorité *</span>
             </label>
             <div className="radio-group">
-              {(['basse', 'moyenne', 'haute', 'urgente'] as TaskPriority[]).map(priority => (
-                <label key={priority} className="radio-label mb">
+              {(['faible', 'moyenne', 'haute'] as TaskPriority[]).map(priority => (
+                <label key={priority} className="radio-label">
                   <input
                     type="radio"
                     name="priority"
@@ -246,24 +294,23 @@ const FrmTache = () => {
                     checked={formData.priority === priority}
                     onChange={handleChange}
                     className="radio-input"
+                    disabled={isSubmitting}
                   />
                   <span className={`radio-custom ${priority}`}></span>
                   <span className="radio-text">
-                    {priority === 'basse' && 'Basse'}
+                    {priority === 'faible' && 'Faible'}
                     {priority === 'moyenne' && 'Moyenne'}
                     {priority === 'haute' && 'Haute'}
-                    {priority === 'urgente' && 'Urgente'}
                   </span>
                 </label>
               ))}
             </div>
           </div>
 
-          {/* Catégorie */}
-          <div className="">
+          <div className="mb">
             <label htmlFor="category_id" className="form-label">
               <Icon icon="bx:category" className="label-icon" />
-              <span>Catégorie</span>
+              <span>Catégorie *</span>
             </label>
             <select
               id="category_id"
@@ -272,23 +319,37 @@ const FrmTache = () => {
               onChange={handleChange}
               className="form-input"
               required
+              disabled={isSubmitting}
             >
               <option value="">Sélectionnez une catégorie</option>
-              <option value="1">Travail</option>
-              <option value="2">Personnel</option>
-              <option value="3">Études</option>
-              <option value="4">Projet</option>
+              {categories.map(category => (
+                <option key={category.id} value={category.id.toString()}>
+                  {category.name}
+                </option>
+              ))}
             </select>
           </div>
         </div>
 
+        {successMessage && (
+          <motion.div
+            className="success-message mbi"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+          >
+            <Icon icon="bx:check-circle" className="success-icon" />
+            {successMessage}
+          </motion.div>
+        )}
         <div className="form-actions">
           <motion.button
             type="button"
             className="secondary-button"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => window.history.back()}
+            onClick={() => navigate('/tache')}
+            disabled={isSubmitting}
           >
             <Icon icon="bx:arrow-back" />
             Retour
@@ -297,7 +358,9 @@ const FrmTache = () => {
           <motion.button
             type="submit"
             className="primary-button"
-            disabled={isSubmitting || !formData.title || !formData.description || !formData.start_datetime || !formData.end_datetime || !formData.category_id}
+            disabled={isSubmitting || !formData.title || !formData.description || 
+                     !formData.start_datetime || !formData.end_datetime || 
+                     !formData.category_id}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -314,18 +377,6 @@ const FrmTache = () => {
             )}
           </motion.button>
         </div>
-
-        {successMessage && (
-          <motion.div
-            className="success-message"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-          >
-            <Icon icon="bx:check-circle" className="success-icon" />
-            {successMessage}
-          </motion.div>
-        )}
       </motion.form>
     </div>
   );
