@@ -435,7 +435,6 @@ const ContainerTaches = () => {
                           <select
                             className={`task-status ${task.status}`}
                             value={task.status}
-                            onChange={(e) => handleStatusChange(task.id, e.target.value as any)}
                           >
                             <option value="a_faire">À faire</option>
                             <option value="en_cours">En cours</option>

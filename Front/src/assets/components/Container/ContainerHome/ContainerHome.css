@@ -132,6 +132,10 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.tasks-list{
+  padding: 7px !important;
+}
+
 .dark-mode  .stat-info h3, .dark-mode .section-header h2, .dark-mode .task-details h3, .dark-mode .task-details .task-description, .dark-mode .meta-value{
   color: #fff !important;
 }
@@ -170,7 +174,431 @@ body {
 
 /* Tasks Container */
 .tasks-container {
-  height: 82%;
+  height: 63%;
+}
+
+/* Dans votre fichier ContainerHome.css */
+
+.tasks-list {
+  position: relative;
+  width: 100%;
+  height: 60vh; /* Ajustez selon vos besoins */
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.video1 {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Assombrissement pour mieux voir le texte */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  padding: 2rem;
+}
+
+.video-content {
+  max-width: 800px;
+}
+
+.video-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.video-content p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.stats-overlay {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  backdrop-filter: blur(5px);
+}
+
+.stat-icon {
+  font-size: 1.3rem;
+}
+
+.cta-container {
+  margin-top: 0.5rem;
+}
+
+.cta-button {
+  background: linear-gradient(135deg, var(--primary-color), #4f46e5);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 1468px) {
+  .video-content h2 {
+    font-size: 2.5rem !important;
+  }
+
+  .video-content p {
+    font-size: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .stats-overlay {
+    margin-top: -1rem !important;
+    gap: 1rem !important;
+  }
+
+  .stat-item {
+    font-size: 1.5em !important;
+    width: 100% !important;
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 1em !important;
+  }
+
+
+  .stat-iconImg{
+    font-size: 0.1em !important;
+    width: 12em !important;
+    margin: -7em !important;
+  }
+
+  .txt{
+    font-size: 0.8em !important;
+  }
+
+  .cta-container{
+    display: none !important;
+  }
+
+  .cta-container2 {
+    display: block !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    margin-top: 1.5em !important;
+    width: fit-content; /* ajuste la largeur au contenu */
+  }
+
+  .cta-text2{
+    margin-bottom: 1em !important;
+  }
+}
+
+@media (max-width: 1268px) {
+  .video-content h2 {
+    font-size: 2.5rem !important;
+  }
+
+  .video-content p {
+    font-size: 1.3rem;
+    margin-top: -1em !important;
+    line-height: 1.6;
+  }
+
+  .stats-overlay {
+    margin-top: -1rem !important;
+    gap: 1rem !important;
+  }
+
+  .stat-item {
+    font-size: 1.2em !important;
+    width: 100% !important;
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 1em !important;
+  }
+
+
+  .stat-iconImg{
+    font-size: 0.1em !important;
+    width: 12em !important;
+    margin: -7em !important;
+  }
+
+  .txt{
+    font-size: 0.8em !important;
+  }
+
+  .cta-container{
+    display: none !important;
+  }
+
+  .cta-container2 {
+    display: block !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    margin-top: 1.5em !important;
+    width: fit-content; /* ajuste la largeur au contenu */
+  }
+
+  .cta-text2{
+    margin-bottom: 1em !important;
+  }
+}
+
+@media (max-width: 1168px) {
+  .video-content h2 {
+    font-size: 2rem !important;
+  }
+
+  .video-content p {
+    font-size: 1rem;
+    margin-top: -1em !important;
+    line-height: 1.6;
+  }
+
+  .stats-overlay {
+    margin-top: -1rem !important;
+    gap: 1rem !important;
+  }
+
+  .stat-item {
+    font-size: 1em !important;
+    width: 100% !important;
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 1em !important;
+  }
+
+
+  .stat-iconImg{
+    font-size: 0.1em !important;
+    width: 12em !important;
+    margin: -7em !important;
+  }
+
+  .txt{
+    font-size: 0.8em !important;
+  }
+
+  .cta-container{
+    display: none !important;
+  }
+
+  .cta-container2 {
+    display: block !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    margin-top: 1.5em !important;
+    width: fit-content; /* ajuste la largeur au contenu */
+  }
+
+  .cta-text2{
+    margin-bottom: 1em !important;
+  }
+}
+
+@media (max-width: 1168px) {
+  .video-content h2 {
+    font-size: 1.5rem !important;
+  }
+
+  .video-content p {
+    font-size: 1rem;
+    margin-top: -1em !important;
+    line-height: 1.6;
+  }
+
+  .stats-overlay {
+    margin-top: -1rem !important;
+    gap: 1rem !important;
+  }
+
+  .stat-item {
+    font-size: 1em !important;
+    width: 100% !important;
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 1em !important;
+  }
+
+
+  .stat-iconImg{
+    font-size: 0.1em !important;
+    width: 12em !important;
+    margin: -7em !important;
+  }
+
+  .txt{
+    font-size: 0.8em !important;
+  }
+
+  .cta-container{
+    display: none !important;
+  }
+
+  .cta-container2 {
+    display: block !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    margin-top: 1.5em !important;
+    width: fit-content; /* ajuste la largeur au contenu */
+  }
+
+  .cta-text2{
+    margin-bottom: 1em !important;
+  }
+}
+
+@media (max-width: 464px) {
+  .video-content h2 {
+    font-size: 1rem !important;
+  }
+
+  .video-content p {
+    font-size: 0.8rem;
+    margin-top: -1em !important;
+    line-height: 1.6;
+  }
+
+  .stats-overlay {
+    margin-top: -1rem !important;
+    gap: 1rem !important;
+  }
+
+  .stat-item {
+    font-size: 0.7em !important;
+    width: 100% !important;
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2em !important;
+  }
+
+
+  .stat-iconImg{
+    font-size: 0.1em !important;
+    width: 13em !important;
+    margin: -15em !important;
+  }
+
+  .txt{
+    font-size: 0.8em !important;
+  }
+
+  .cta-container{
+    display: none !important;
+  }
+
+  .cta-container2 {
+    display: block !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    margin-top: 1.5em !important;
+    width: fit-content; /* ajuste la largeur au contenu */
+  }
+
+  .cta-text2{
+    margin-bottom: 1em !important;
+  }
+}
+
+@media (max-width: 464px) {
+  .video-content h2 {
+    font-size: 1rem !important;
+  }
+
+  .video-content p {
+    font-size: 0.65rem;
+    margin-top: -1em !important;
+    line-height: 1.6;
+  }
+
+  .stats-overlay {
+    margin-top: -1rem !important;
+    gap: 1rem !important;
+  }
+
+  .stat-item {
+    font-size: 0.6em !important;
+    width: 100% !important;
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2.5em !important;
+  }
+
+
+  .stat-iconImg{
+    font-size: 0.1em !important;
+    width: 13em !important;
+    margin: -20em !important;
+    margin-left: 1em !important;
+  }
+
+  .txt{
+    font-size: 0.9em !important;
+  }
+
+  .cta-container{
+    display: none !important;
+  }
+
+  .cta-container2 {
+    display: block !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    margin-top: 1.5em !important;
+    width: fit-content; /* ajuste la largeur au contenu */
+  }
+
+  .cta-text2{
+    margin-bottom: 1em !important;
+  }
+}
+
+.cta-container2{
+  display:  none;
+}
+
+.cta-button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+}
+
+.video1{
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 10px !important;
 }
 
 @media (max-width: 1024px) {
