@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-_^ftr&f1rona_qs7e_=ob1c%o0svkjwp4erbt0bt4q69vnu_i4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']  # Permet toutes les connexions pour le développement
 
 
 # Application definition
@@ -38,11 +38,21 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'rest_framework',  # ← Pour l'API REST
-    'tasks',           # ← Mon application personnalisée
+    'rest_framework',  # Pour l'API REST
+    'django_filters',
+    'corsheaders',     # Pour gérer les CORS
+    'tasks',           # Mon application personnalisée
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+    ],
+}
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # Doit être placé en haut
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -127,3 +137,37 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CORS Configuration
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Port par défaut de Vite
+    "http://127.0.0.1:5173",  # Alternative localhost
+    "http://localhost:3000",  # Port par défaut de Create React App
+    "http://127.0.0.1:3000",  # Alternative localhost
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+# Optionnel : Pour le développement seulement, vous pouvez autoriser toutes les origines
+# CORS_ALLOW_ALL_ORIGINS = True  # À n'utiliser qu'en développement!
