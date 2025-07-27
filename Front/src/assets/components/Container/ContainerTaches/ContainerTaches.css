@@ -45,6 +45,11 @@
   border-radius: 10px !important;
 }
 
+.dark-mode .form-group input, .dark-mode .form-group select, .dark-mode .form-group textarea{
+  background: rgba(30, 41, 59, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
 .dark-mode .glassmorphism {
   background: rgba(30, 41, 59, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -483,7 +488,7 @@
   flex: 1;
 }
 
-.task-priority {
+.task {
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.25rem 0.75rem;
@@ -491,7 +496,7 @@
   text-transform: uppercase;
 }
 
-.task-priority.urgent {
+.task.urgent {
   background: rgba(239, 68, 68, 0.1);
   color: var(--danger);
 }
@@ -664,35 +669,6 @@
     flex-direction: column;
     align-items: stretch;
   }
-
-  .task-priority {
-    margin-right: 3.5rem !important;
-    margin-left: 3rem !important;
-  }
-
-  .task-priority.urgente {
-    background: rgba(249, 116, 22, 0) !important;;
-    box-shadow: 0 0 0 1px rgba(249, 116, 22, 0) !important;
-    color: var(--priority-urgent);
-  }
-
-  .task-priority.haute {
-    background: rgba(249, 116, 22, 0) !important;;
-    box-shadow: 0 0 0 1px rgba(249, 116, 22, 0) !important;
-    color: var(--priority-high);
-  }
-
-  .task-priority.moyenne {
-    background: rgba(249, 116, 22, 0) !important;;
-    box-shadow: 0 0 0 1px rgba(249, 116, 22, 0) !important;
-    color: var(--priority-medium);
-  }
-
-  .task-priority.basse {
-    background: rgba(249, 116, 22, 0) !important;;
-    box-shadow: 0 0 0 1px rgba(249, 116, 22, 0) !important;
-    color: var(--priority-low);
-  }
   
   .header-content {
     margin-bottom: 1rem;
@@ -755,35 +731,6 @@
   .task-manager {
     padding: 1rem;
   }
-
-  .task-priority {
-    margin-right: 3.5rem !important;
-    margin-left: 3rem !important;
-  }
-
-  .task-priority.urgente {
-    background: rgba(249, 116, 22, 0) !important;;
-    box-shadow: 0 0 0 1px rgba(249, 116, 22, 0) !important;
-    color: var(--priority-urgent);
-  }
-
-  .task-priority.haute {
-    background: rgba(249, 116, 22, 0) !important;;
-    box-shadow: 0 0 0 1px rgba(249, 116, 22, 0) !important;
-    color: var(--priority-high);
-  }
-
-  .task-priority.moyenne {
-    background: rgba(249, 116, 22, 0) !important;;
-    box-shadow: 0 0 0 1px rgba(249, 116, 22, 0) !important;
-    color: var(--priority-medium);
-  }
-
-  .task-priority.basse {
-    background: rgba(249, 116, 22, 0) !important;;
-    box-shadow: 0 0 0 1px rgba(249, 116, 22, 0) !important;
-    color: var(--priority-low);
-  }
   
   .task-title {
     font-size: 1.5rem;
@@ -822,35 +769,6 @@
   .panel-header {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .task-priority {
-    margin-right: 3.5rem !important;
-    margin-left: 3rem !important;
-  }
-
-  .task-priority.urgente {
-    background: rgba(249, 116, 22, 0) !important;;
-    box-shadow: 0 0 0 1px rgba(249, 116, 22, 0) !important;
-    color: var(--priority-urgent);
-  }
-
-  .task-priority.haute {
-    background: rgba(249, 116, 22, 0) !important;;
-    box-shadow: 0 0 0 1px rgba(249, 116, 22, 0) !important;
-    color: var(--priority-high);
-  }
-
-  .task-priority.moyenne {
-    background: rgba(249, 116, 22, 0) !important;;
-    box-shadow: 0 0 0 1px rgba(249, 116, 22, 0) !important;
-    color: var(--priority-medium);
-  }
-
-  .task-priority.basse {
-    background: rgba(249, 116, 22, 0) !important;;
-    box-shadow: 0 0 0 1px rgba(249, 116, 22, 0) !important;
-    color: var(--priority-low);
   }
   
   .category-badge {
@@ -930,36 +848,26 @@
   margin: 0;
 }
 
-/* Priorités */
-.task-priority {
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.35rem 0.75rem;
-  border-radius: 9999px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-}
 
-.task-priority.urgente {
+.task.urgente {
   background: rgba(220, 63, 63, 0.395);
   color: var(--priority-urgent);
   box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.2);
 }
 
-.task-priority.haute {
+.task.haute {
   background: rgba(249, 115, 22, 0.1);
   color: var(--priority-high);
   box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.2);
 }
 
-.task-priority.moyenne {
+.task.moyenne {
   background: rgba(245, 158, 11, 0.1);
   color: var(--priority-medium);
   box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.2);
 }
 
-.task-priority.basse {
+.task.basse {
   background: rgba(16, 185, 129, 0.1);
   color: var(--priority-low);
   box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.2);

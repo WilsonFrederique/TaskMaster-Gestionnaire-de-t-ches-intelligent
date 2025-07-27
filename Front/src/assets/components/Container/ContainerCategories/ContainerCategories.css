@@ -41,7 +41,6 @@
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: var(--shadow-md);
-  /* /* transition: var(--transition-slow); */ */
 }
 
 .dark-mode .glassmorphism {
@@ -98,7 +97,6 @@
 .breadcrumb-link {
   color: var(--text-secondary);
   text-decoration: none;
-  /* /* transition: var(--transition); */ */
   font-weight: 500;
   white-space: nowrap;
 }
@@ -132,7 +130,6 @@
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
-  /* /* transition: var(--transition); */ */
   box-shadow: var(--shadow-md);
   position: relative;
   overflow: hidden;
@@ -161,7 +158,6 @@
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
-  /* /* transition: var(--transition); */ */
 }
 
 .secondary-button:hover {
@@ -204,7 +200,6 @@
   color: var(--text-primary);
   font-size: 0.95rem;
   font-weight: 500;
-  /* /* transition: var(--transition); */ */
   box-shadow: var(--shadow-sm);
 }
 
@@ -224,7 +219,6 @@
   color: var(--text-secondary);
   cursor: pointer;
   font-size: 1.25rem;
-  /* /* transition: var(--transition); */ */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -234,7 +228,6 @@
   color: var(--primary);
 }
 
-/* Onglets de tri */
 .sort-tabs {
   display: flex;
   gap: 0.75rem;
@@ -259,7 +252,6 @@
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
-  /* /* transition: var(--transition); */ */
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -293,7 +285,6 @@
 .category-card {
   border-radius: var(--radius-lg);
   overflow: hidden;
-  /* /* transition: var(--transition); */ */
   position: relative;
   will-change: transform;
 }
@@ -352,7 +343,6 @@
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  /* /* transition: var(--transition); */ */
   color: var(--text-secondary);
 }
 
@@ -450,7 +440,6 @@
   border-radius: 50%;
   cursor: pointer;
   color: var(--text-secondary);
-  /* /* transition: var(--transition); */ */
 }
 
 .close-button:hover {
@@ -477,7 +466,6 @@
   background-color: var(--surface);
   color: var(--text-primary);
   font-size: 0.95rem;
-  /* /* transition: var(--transition); */ */
 }
 
 .form-group input:focus {
@@ -541,5 +529,278 @@
   
   .empty-state {
     padding: 2rem 1rem;
+  }
+}
+
+
+
+
+
+
+
+/* Styles pour la boîte de modification */
+.edit-category-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.edit-category-form {
+  width: 100%;
+  max-width: 450px;
+  padding: 2rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  position: relative;
+}
+
+.edit-category-form .form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.edit-category-form .form-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #1e293b;
+}
+
+.edit-category-form .close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #64748b;
+  transition: color 0.2s;
+}
+
+.edit-category-form .close-button:hover {
+  color: #475569;
+}
+
+.edit-category-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.edit-category-form .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #334155;
+}
+
+.edit-category-form .form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background-color: #fff;
+  font-size: 1rem;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.edit-category-form .form-group input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.edit-category-form .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* Animation pour l'entrée de la modal */
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Animation pour la sortie de la modal */
+@keyframes modalExit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+}
+
+
+
+
+
+
+
+
+/* Styles pour la confirmation de suppression */
+.delete-confirmation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.delete-confirmation-form {
+  width: 100%;
+  max-width: 450px;
+  padding: 2rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  position: relative;
+}
+
+.delete-confirmation-form .form-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.delete-confirmation-form .delete-icon {
+  font-size: 3rem;
+  color: #f43f5e;
+  margin-bottom: 1rem;
+}
+
+.delete-confirmation-form .form-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #1e293b;
+}
+
+.delete-confirmation-form .form-content {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.delete-confirmation-form .form-content p {
+  margin: 0.5rem 0;
+  color: #334155;
+}
+
+.delete-confirmation-form .warning-text {
+  color: #f43f5e;
+  font-weight: 500;
+}
+
+.delete-confirmation-form .form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.danger-button {
+  background-color: #f43f5e;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.danger-button:hover {
+  background-color: #e11d48;
+}
+
+/* Styles pour la notification de succès */
+.success-notification {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background-color: #10b981;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  max-width: 400px;
+}
+
+.dark-mode .delete-confirmation-form .form-header h3, .dark-mode .delete-confirmation-form .form-content p{
+  color: #e2e8f0 !important;
+}
+
+.success-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.success-icon {
+  font-size: 1.5rem;
+}
+
+.close-notification {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-left: 1rem;
+  font-size: 1.2rem;
+}
+
+/* Animation pour la notification */
+@keyframes slideIn {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
   }
 }
